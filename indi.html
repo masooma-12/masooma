@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masooma's Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #111827;
+            --bg-darker: #1F2937;
+            --text-primary: #F3F4F6;
+            --text-secondary: #D1D5DB;
+            --cyan: #22D3EE;
+            --purple: #A855F7;
+            --cyan-blue: linear-gradient(to right, #22D3EE, #3B82F6);
+            --purple-pink: linear-gradient(to right, #A855F7, #EC4899);
+            --green-cyan: linear-gradient(to right, #34D399, #22D3EE);
+            --yellow-orange: linear-gradient(to right, #FBBF24, #F97316);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            min-height: 100vh;
+            position: relative;
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1024px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        .title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: var(--cyan-blue);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+        }
+
+        .profile-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-border {
+            width: 192px;
+            height: 192px;
+            border-radius: 50%;
+            padding: 4px;
+            background: var(--cyan-blue);
+        }
+
+        .profile-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            padding: 4px;
+            background: var(--bg-dark);
+            overflow: hidden;
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            background: var(--bg-darker);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        }
+
+        .nav-btn:hover::after {
+            left: 100%;
+            transition: 0.5s;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            background: var(--bg-dark);
+        }
+
+        .nav-btn.active {
+            background: var(--cyan-blue);
+            color: white;
+        }
+
+        .section {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .skill-card {
+            perspective: 1000px; /* Add perspective to the card */
+        }
+
+        .skill-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d; /* Preserve 3D for child elements */
+        }
+
+        .skill-card:hover .skill-card-inner {
+            transform: rotateY(180deg); /* Flip the card on hover */
+        }
+
+        .skill-card-front, .skill-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* Hide the back face when not flipped */
+            border-radius: 0.5rem;
+        }
+
+        .skill-card-front {
+            background: var(--bg-darker);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .skill-card-back {
+            background: var(--bg-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: rotateY(180deg); /* Rotate the back face */
+        }
+
+        .skill-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .projects-grid, .achievements-list {
+            display: grid;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .project-card, .achievement-card {
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            background: var(--bg-darker);
+            border: 1px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .project-card:hover, .achievement-card:hover {
+            border-color: var(--cyan);
+            transform: translateY(-5px);
+        }
+
+        .contact-form {
+            max-width: 500px;
+            margin: 0 auto;
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        input, textarea {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background: var(--bg-darker);
+            border: 1px solid var(--text-secondary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--cyan);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(34, 211, 238, 0.1);
+        }
+
+        .submit-btn {
+            padding: 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            background: var(--cyan-blue);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(34, 211, 238, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+            }
+
+            .nav-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="container">
+        <main class="main-content">
+            <h1 class="title">Welcome to Masooma's Portfolio</h1>
+
+            <div class="profile-container">
+                <div class="profile-border">
+                    <div class="profile-inner">
+                        <img src="/mas,99.jpg" alt="Profile" class="profile-image">
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <button class="nav-btn active" data-section="home">🏠 Home</button>
+                <button class="nav-btn" data-section="achievements">🏆 Achievements</button>
+                <button class="nav-btn" data-section="projects">📁 Projects</button>
+                <button class="nav-btn" data-section="contact">✉️ Contact</button>
+            </div>
+
+            <div id="home" class="section active">
+                <h2>About Me</h2>
+                <p>A passionate developer with interests in web development, game development, and programming. 
+                   I love turning complex problems into simple, beautiful solutions.</p>
+                
+                <div class="skills-grid">
+                    <div class="skill-card">
+                        <div class="skill-card-inner">
+                            <div class="skill-card-front">
+                                <div class="skill-icon">💻</div>
+                                <h3>Web Development</h3>
+                            </div>
+                            <div class="skill-card-back">
+                                <p>Experience with HTML, CSS, JavaScript, and frameworks like React.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-card">
+                        <div class="skill-card-inner">
+                            <div class="skill-card-front">
+                                <div class="skill-icon">🎮</div>
+                                <h3>Game Development</h3>
+                            </div>
+                            <div class="skill-card-back">
+                                <p>Developed games using Unity and C#.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-card">
+                        <div class="skill-card-inner">
+                            <div class="skill-card-front">
+                                <div class="skill-icon">👩‍💻</div>
+                                <h3>Programming</h3>
+                            </div>
+                            <div class="skill-card-back">
+                                <p>Proficient in Python, Java, and C++.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="skill-card">
+                        <div class="skill-card-inner">
+                            <div class="skill-card-front">
+                                <div class="skill-icon">🚀</div>
+                                <h3>Problem Solving</h3>
+                            </div>
+                            <div class="skill-card-back">
+                                <p>Strong analytical skills and experience in algorithm design.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="achievements" class="section">
+                <h2>Achievements</h2>
+                <div class="achievements-list">
+                    <div class="achievement-card">
+                        <h3>🏆 Hackathon Winner</h3>
+                        <p>First place in local coding competition</p>
+                    </div>
+                    <div class="achievement-card">
+                        <h3>📚 Certifications</h3>
+                        <p>Multiple web development certifications</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="projects" class="section">
+                <h2>Projects</h2>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <h3>🎮 Game Development</h3>
+                        <p>Created a 2D platformer game using Unity</p>
+                    </div>
+                    <div class="project-card">
+                        <h3>💻 Web Application</h3>
+                        <p>Built a full-stack web application</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="contact" class="section">
+                <h2>Contact Me</h2>
+                <form class="contact-form" id="contact-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Initialize particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: ['#22D3EE', '#A855F7']
+                },
+                shape: {
+                    type: 'circle'
+                },
+                opacity: {
+                    value: 0.5,
+                    random: false
+                },
+                size: {
+                    value: 3,
+                    random: true
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#22D3EE',
+                    opacity: 0.2,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: 'grab'
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: 'push'
+                    },
+                    resize: true
+                },
+                modes: {
+                    grab: {
+                        distance: 140,
+                        line_linked: {
+                            opacity: 0.5
+                        }
+                    },
+                    push: {
+                        particles_nb: 4
+                    }
+                }
+            },
+            retina_detect: true
+        });
+
+        // Navigation
+        document.querySelectorAll('.nav-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and sections
+                document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+                
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Show corresponding section
+                const sectionId = button.getAttribute('data-section');
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+
+        // Contact form handling
+        document.getElementById('contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Message sent successfully!');
+            e.target.reset();
+        });
+    </script>
+</body>
+</html>
