@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masooma's Portfolio</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background-color: #111827;
+            color: white;
+            min-height: 100vh;
+            padding: 2rem;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .cyber-background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+        }
+
+        .cyber-grid {
+            position: absolute;
+            inset: -50%;
+            background-image: 
+                linear-gradient(to right, rgba(0,255,255,0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0,255,255,0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform-origin: center;
+            animation: gridRotate 240s linear infinite;
+        }
+
+        .cyber-lines {
+            position: absolute;
+            inset: 0;
+        }
+
+        .cyber-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, rgba(0,255,255,0.2), transparent);
+            height: 1px;
+            width: 200%;
+            left: -50%;
+            animation: lineDrift linear infinite;
+        }
+
+        .cyber-line:nth-child(1) {
+            top: 20%;
+            animation-duration: 15s;
+        }
+
+        .cyber-line:nth-child(2) {
+            top: 40%;
+            animation-duration: 25s;
+        }
+
+        .cyber-line:nth-child(3) {
+            top: 60%;
+            animation-duration: 20s;
+        }
+
+        .cyber-line:nth-child(4) {
+            top: 80%;
+            animation-duration: 30s;
+        }
+
+        .cyber-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(20px);
+            opacity: 0.5;
+            animation: orbFloat linear infinite;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: rgba(0, 255, 255, 0.1);
+            animation-duration: 25s;
+        }
+
+        .orb-2 {
+            width: 200px;
+            height: 200px;
+            background: rgba(0, 150, 255, 0.1);
+            animation-duration: 30s;
+            animation-delay: -10s;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Updated Nav Grid */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            position: sticky;
+            top: 1rem;
+            z-index: 10;
+            background: rgba(17, 24, 39, 0.8);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeDown 1s forwards;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #22d3ee;
+            margin-bottom: 2rem;
+        }
+
+        .profile-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin: 0 auto 2rem;
+    background: linear-gradient(45deg, #22d3ee, #3b82f6);
+    position: relative;
+    opacity: 0;
+    animation: dropIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    overflow: hidden; /* Added this line */
+}
+
+.profile-image::before {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: #111827;
+}
+
+.profile-image::after {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border-radius: 50%;
+    border: 2px solid #22d3ee;
+}
+
+.profile-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Added this line */
+    border-radius: 50%;
+    position: relative;
+    z-index: 1;
+}
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .button {
+            padding: 0.75rem;
+            background-color: #1f2937;
+            border: 1px solid #22d3ee;
+            color: #22d3ee;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            transform: scale(1.05);
+            background-color: #374151;
+        }
+
+        .button:active {
+            transform: scale(0.95);
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            color: #22d3ee;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card {
+            background-color: #1f2937;
+            border: 1px solid #22d3ee;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: slideIn 0.5s forwards;
+        }
+
+        .card h3 {
+            color: #22d3ee;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            color: #22d3ee;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 0.5rem;
+            background-color: #1f2937;
+            border: 1px solid #22d3ee;
+            border-radius: 0.25rem;
+            color: white;
+        }
+
+        .footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #22d3ee;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .social-links a {
+            color: #22d3ee;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .social-links a:hover {
+            transform: scale(1.2);
+            color: #67e8f9;
+        }
+
+        .page {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Animations */
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes dropIn {
+            0% {
+                opacity: 0;
+                transform: scale(0) translateY(-100px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes gridRotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes lineDrift {
+            0% {
+                transform: translateX(-30%);
+            }
+            100% {
+                transform: translateX(30%);
+            }
+        }
+
+        @keyframes orbFloat {
+            0% {
+                transform: translate(-50vw, -20vh);
+            }
+            25% {
+                transform: translate(50vw, 20vh);
+            }
+            50% {
+                transform: translate(20vw, 50vh);
+            }
+            75% {
+                transform: translate(-20vw, -50vh);
+            }
+            100% {
+                transform: translate(-50vw, -20vh);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="cyber-background">
+        <div class="cyber-grid"></div>
+        <div class="cyber-lines">
+            <div class="cyber-line"></div>
+            <div class="cyber-line"></div>
+            <div class="cyber-line"></div>
+            <div class="cyber-line"></div>
+        </div>
+        <div class="cyber-orb orb-1"></div>
+        <div class="cyber-orb orb-2"></div>
+    </div>
+
+    <div class="container">
+        <!-- Navigation buttons that appear on all pages -->
+        <div class="nav-grid">
+            <button class="button" onclick="showPage('home-page')">Home</button>
+            <button class="button" onclick="showPage('achievements-page')">Achievements</button>
+            <button class="button" onclick="showPage('projects-page')">Projects</button>
+            <button class="button" onclick="showPage('contact-page')">Contact</button>
+        </div>
+
+        <div id="home-page" class="page active">
+            <header class="header">
+                <h1>Welcome to Masooma's Portfolio</h1>
+                <div class="profile-image">
+                    <img src="img/nn.jpg" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; position: relative; z-index: 1;">
+                </div>
+                
+                <div class="skills-grid">
+                    <button class="button">Web Dev - Beginner</button>
+                    <button class="button">Django</button>
+                    <button class="button">Python</button>
+                    <button class="button">C Language</button>
+                    <button class="button">Game Dev</button>
+                </div>
+            </header>
+
+            <section class="section">
+                <h2>About Me</h2>
+                <p>I am a passionate and curious individual pursuing a degree in Computer Science at Nawab Shah Alam Khan College of Engineering and Technology. My fascination with technology and problem-solving drove me to choose software engineering as my career path. I enjoy exploring innovative solutions, building creative projects, and staying updated with emerging trends in the tech world. This field offers me the perfect blend of logic, creativity, and endless opportunities to make a difference. I am eager to contribute to the ever-evolving digital landscape and grow as a skilled professional in the industry.</p>
+            </section>
+
+            <section class="section">
+                <h2>Hobbies</h2>
+                <p>I have a diverse set of hobbies that keep me engaged and inspired. I enjoy playing basketball, as it keeps me active and sharpens my team skills. Designing and developing websites is something I pursue for fun, blending creativity and problem-solving to bring ideas to life. Reading is another passion of mine, as it allows me to explore new perspectives and learn continuously. Additionally, I love experimenting with design projects, channeling my artistic side into creating visually appealing concepts. These hobbies not only provide me with joy but also help me grow in various aspects of life.</p>
+            </section>
+        </div>
+
+        <div id="achievements-page" class="page">
+            <h1 class="header">Achievements</h1>
+            <div class="card">
+                <h3>Coding Competetion</h3>
+                <p>consolation price in google code camp
+                    Consolation price for code camp 2018, 2019, 2020</p>
+            </div>
+            <div class="card">
+                <h3>Science Fair 2019-2021</h3>
+                <p>Received for making a way to reserve the water harvesting,
+                    Received for making crop harvesting</p>
+            </div>
+            <div class="card">
+                <h3>Participations</h3>
+                <p>participated in SIH hackathon 2024
+                    participated Hach evasion 2021
+                CTF competetions</p>
+            </div>
+        </div>
+
+        <div id="projects-page" class="page">
+            <h1 class="header">Projects</h1>
+            <div class="card">
+                <h3>Project 1</h3>
+                <p>I’m developing a responsive and user-friendly website for Nawab Shah Alam Khan College of Engineering and Technology, featuring dynamic updates, resources, and seamless navigation to serve the college communty</p>
+            </div>
+            <div class="card">
+                <h3>Project 2</h3>
+                <p>I’m creating an offline Dino game inspired by the Chrome classic, using JavaScript for game logic and animations, combining fun with skill enhancement</p>
+            </div>
+            <div class="card">
+                <h3>Project 3</h3>
+                <p>I am currently working on building an Instagram clone, a project aimed at replicating the core functionalities of the popular social media platform. This includes features like user authentication, profile creation, photo and video uploads, likes, comments, and a dynamic feed. The project is being developed using technologies like React for the frontend, Node.js for the backend, and Firebase for real-time data and media storage. This hands-on experience is helping me enhance my skills in full-stack development, database management, and responsive design, while also deepening my understanding of building scalable and interactive web applications.</p>
+            </div>
+        </div>
+
+        <div id="contact-page" class="page">
+            <h1 class="header">Contact Me</h1>
+            <form class="contact-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="query">Query</label>
+                    <textarea id="query" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="button">Submit</button>
+            </form>
+        </div>
+
+        <footer class="footer">
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/masooma-fatima-18088b309?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"><i class="fab fa-linkedin"></i></a>
+                <a href="https://www.instagram.com/.soomxx.?igsh=bW5nNjIzMmlsY2M1&utm_source=qr"><i class="fab fa-instagram"></i></a>
+                <a href="https://github.com/masooma-12"><i class="fab fa-github"></i></a>
+                <a href="masoomafatima123479@gmail.com"><i class="fas fa-envelope"></i></a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // Add animation to cards when they appear
+        document.querySelectorAll('.card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Handle form submission
+        document.querySelector('.contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const query = document.getElementById('query').value;
+            console.log('Form submitted:', { email, query });
+            // Add your form submission logic here
+        });
+    </script>
+</body>
+</html>
